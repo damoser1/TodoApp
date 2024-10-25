@@ -22,21 +22,26 @@ namespace TodoApp.Core.ViewModels
 
         public string Title => "TodoApp";
 
+
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(AddTodoCommand))]
         private string _todoTitle = string.Empty;
 
         [ObservableProperty]
         private ObservableCollection<Todo> _todos = new();
 
-        [RelayCommand]
+        private bool CanAdd => this.TodoTitle.Length  > 0;
+
+        [RelayCommand(CanExecute = nameof(CanAdd))]
         void AddTodo()
         {
-            Todo todo = new(TodoTitle);
-            _repository.Add(todo);
-            Todos.Add(todo);
 
-            // text entry should be empty
-            this.TodoTitle = string.Empty;
+                Todo todo = new(TodoTitle);
+                _repository.Add(todo);
+                Todos.Add(todo);
+
+                // text entry should be empty
+                this.TodoTitle = string.Empty;
         }
 
         [RelayCommand]
