@@ -1,4 +1,3 @@
-using Moq;
 using TodoApp.Core.Interfaces;
 using TodoApp.Core.Models;
 using TodoApp.Core.ViewModels;
@@ -118,6 +117,25 @@ namespace TodoApp.Tests
 
             // assert
             Assert.That(viewModel.Todos.Count, Is.EqualTo(1));
+        }
+
+
+        [Test]
+        public void TestMockItem()
+        {
+            // arrange
+            var mock = new Mock<IRepository>();
+            mock.Setup(r => r.GetAll()).Returns(new List<Todo>()
+            {
+                new Todo("Test")
+            });
+            MainViewModel viewModel = new MainViewModel(mock.Object);
+            // act
+            viewModel.LoadDataCommand.Execute(null);
+            viewModel.AddTodoItemCommand.Execute(new Todo("Probe"));
+
+            // assert
+            Assert.That(viewModel.Todos.Count, Is.Not.EqualTo(1));
         }
     }
 }

@@ -45,6 +45,14 @@ namespace TodoApp.Core.ViewModels
         }
 
         [RelayCommand]
+        void AddTodoItem(Todo todo)
+        {
+
+            _repository.Add(todo);
+            Todos.Add(todo);
+        }
+
+        [RelayCommand]
         void LoadData()
         {
             _todos.Clear();
