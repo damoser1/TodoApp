@@ -22,5 +22,10 @@ namespace TodoApp.Core.Models
             this.Id = id;
             this.Title = title;
         }
+
+        public override string ToString()
+        {
+            return this.Title;
+        }
     }
 }
