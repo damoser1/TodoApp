@@ -1,3 +1,4 @@
+using Moq;
 using TodoApp.Core.Interfaces;
 using TodoApp.Core.Models;
 using TodoApp.Core.ViewModels;
@@ -89,7 +90,7 @@ namespace TodoApp.Tests
             viewModel.AddTodoCommand.Execute(null);
 
             // assert
-            Todo? item = (from t in viewModel.Todos
+            Todo? item = (from t in rep.GetAll()
                           where t.Title == input
                           select t).FirstOrDefault();
 
@@ -100,6 +101,23 @@ namespace TodoApp.Tests
                 Assert.That(viewModel.TodoTitle, Is.EqualTo(string.Empty));
             });
 
+        }
+
+        [Test]
+        public void TestMock()
+        {
+            // arrange
+            var mock = new Mock<IRepository>();
+            mock.Setup(r => r.GetAll()).Returns(new List<Todo>()
+            {
+                new Todo("Test")
+            });
+            MainViewModel viewModel = new MainViewModel(mock.Object);   
+            // act
+            viewModel.LoadDataCommand.Execute(null);
+
+            // assert
+            Assert.That(viewModel.Todos.Count, Is.EqualTo(1));
         }
     }
 }
