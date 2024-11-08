@@ -1,4 +1,5 @@
 using TodoApp.Core.Interfaces;
+using TodoApp.Core.Models;
 using TodoApp.Core.ViewModels;
 using TodoApp.TodoData;
 
@@ -32,17 +33,46 @@ namespace TodoApp.Tests
         }
 
         [Test]
-        public void TestVM()
+        public void TestLoadCommand()
         {
             // arrange
             IRepository rep = new StaticData();
-
-            // act
             MainViewModel viewModel = new MainViewModel(rep);
 
-            // assert
-            Assert.IsNotNull(viewModel);
 
+            // act
+           viewModel.LoadDataCommand.Execute(null);
+
+            // assert
+            Assert.That(viewModel.Todos.Count, Is.EqualTo(6));
+
+        }
+
+        [Test]
+        public void TestSaveCommandVM()
+        {
+            // arrange
+            IRepository rep = new StaticData();
+            MainViewModel viewModel = new MainViewModel(rep);
+
+
+            // act
+            string input = "***TEST***";
+            viewModel.TodoTitle = input;
+            viewModel.AddTodoCommand.Execute(null);
+
+            // assert
+            Todo? item = (from t in viewModel.Todos
+                         where t.Title == input
+                         select t).FirstOrDefault();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(item, Is.Not.Null);
+                Assert.That(item?.Title, Is.EqualTo(input));
+                Assert.That(viewModel.TodoTitle, Is.EqualTo(string.Empty));
+            });
+            
         }
     }
 }
