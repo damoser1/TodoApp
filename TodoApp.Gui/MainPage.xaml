@@ -5,7 +5,8 @@
              x:DataType="viewmodels:MainViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:TodoApp.Core.Models;assembly=TodoApp.Core"
-             x:Class="TodoApp.Gui.MainPage">
+             x:Class="TodoApp.Gui.MainPage"
+             xmlns:strings="clr-namespace:TodoApp.Gui.Resources.Languages">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
@@ -18,7 +19,7 @@
           ColumnDefinitions="*,Auto"
           Margin="20">
         <!-- title -->
-        <Label Text="{Binding Title}"
+        <Label Text="{x:Static strings:AppRessources.AddTodo}"
                Grid.Row="0"
                Grid.ColumnSpan="2" 
                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
